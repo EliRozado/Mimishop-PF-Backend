@@ -115,8 +115,17 @@ router.get('/register', async (req, res) => {
     res.render('register')
 })
 
-router.get('/premium', async (req, res) => {
-    res.render('premium')
+router.get('/premium',passportCall('current'), canAccess(['premium', 'user']),  async (req, res) => {
+    if (!req.user) {
+        return res.redirect('/login')
+    }
+
+    const user = req.user;
+
+    const isPremium = user.role == "premium"
+    const isUser = user.role == "user"
+
+    res.render('premium', {user, isPremium, isUser})
 })
 
 // -- view for "generete a password recovery request"

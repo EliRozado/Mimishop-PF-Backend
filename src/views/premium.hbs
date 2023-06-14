@@ -11,6 +11,7 @@
         <a class="nav-link me-auto" aria-current="page" href="/products"><i class="bi bi-arrow-left"></i> Back to products</a>
         <div class="navbar-nav d-flex justify-content-between">
             {{#if isPremium}}
+                <a class="nav-link" href="/premium">Premium</a>
                 <a class="nav-link" href="/addProduct">Add Product</a>
                 <a class="nav-link" href="/user/{{user.id}}">Profile</a>
                 <a class="nav-link" href="/carts/{{user.cart}}"><i class="bi bi-cart"></i></a>
@@ -23,3 +24,59 @@
         </div>
     </div>
 </div>
+<div class="container my-3 py-3">
+    <div class="container-sm bg-body-secondary p-3" style="border-radius: 20px;">
+        {{#if isUser}}
+            <h2 class="mx-3">Premium Request</h2>
+            <p class="mx-3">Becoming a premium user allows you to sell in the site, you will be able to post and manage your own products.</p>
+            <p class="mx-3"> For that reason, we require users to verify their identities. If you would like to become a premium member, please fill the form below with the requested documents.</p>        
+            <p class="mx-3">Allowed formats for documents are: .png, .jpg and .jpeg</p>
+            <form class="m-3" id="premiumDocumentsUpload">
+                <div class="mb-3">
+                    <label for="id" class="form-label">ID *</label>
+                    <input type="file" class="form-control" name="id" aria-describedby="id" accept=".png,.jpg,.jpeg,image/png,image/jpg,image/jpeg" required>
+                    <small id="passwordHelpBlock" class="form-text text-muted">
+                        This document should be either your ID.
+                    </small>
+                </div>
+                <div class="mb-3">
+                    <label for="address" class="form-label">Address *</label>
+                    <input type="file" class="form-control" name="address" aria-describedby="address" accept=".png,.jpg,.jpeg,image/png,image/jpg,image/jpeg" required>
+                    <small id="passwordHelpBlock" class="form-text text-muted">
+                        This document can be any service bill that confirms your address.
+                    </small>
+                </div>
+                <div class="mb-3">
+                    <label for="status" class="form-label">Account status *</label>
+                    <input type="file" class="form-control" name="status" aria-describedby="status" accept=".png,.jpg,.jpeg,image/png,image/jpg,image/jpeg" required>
+                    <small id="passwordHelpBlock" class="form-text text-muted">
+                        This document confirms that your bank account status is okay.
+                    </small>
+                </div>
+                <button  type="submit" class="btn btn-primary">Submit</button>
+            </form>
+            <div id="uploadProgress" class="text-center">
+                <p>Upload in progress..</p>
+                <progress id="progressbar" max="100" value="0"></progress>
+            </div>
+            <div id="uploadSuccess" class="text-center">
+                <p><i class="bi bi-check-circle text-success"></i> Upload successful</p>
+                <button  type="submit" class="btn btn-primary">Become premium</button>
+            </div>
+        {{else}}    
+            <div class="text-center">
+                <i class="bi bi-check-circle display-1 text-success"></i>
+                <h3 class="my-2">Premium activated</h3>
+                <p>You are a verified premium user!</p>
+                <p>If you present any issue, you can directly contact the system admin.</p>
+            </div>
+        {{/if}}
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+<script src="./../static/js/fetch_request.js"></script>
+<script src="./../static/js/main.js"></script>
