@@ -161,17 +161,20 @@ function deleteProductFetch(e){
 
 function newProductFetch(e){
     if(e.preventDefault) e.preventDefault();
+    let fileInput = document.querySelector(('input[type="file"]'))
+    let count = fileInput.files.length;
 
-    const data = {};
+    const data = new FormData(addProduct);    
+    console.log(data)
 
-    new FormData(addProduct).forEach( (value, key) => data[key] = value)
-    
+    for(let x = 0; x < count; x++){
+        data.append("files[]", fileInput.files[x], fileInput.files[x].name)
+    }
+
+    console.log(data)
     fetch(`/api/products`, {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data)
+        body: data
     }).then( async response => {
         const result = await response.json()
 

@@ -55,6 +55,8 @@ class ProductValidator{
         let owner;
         let thumbnails = [];
 
+        console.log(req.body)
+
         if(req.user.role == 'premium') {
             owner = req.user.email
         }else if(req.user.role == 'admin') owner = 'admin'

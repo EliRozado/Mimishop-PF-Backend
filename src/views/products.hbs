@@ -8,7 +8,7 @@
 </nav>
 <div class="navbar navbar-expand-lg bg-light mb-3">
     <div class="container d-flex align-items-baseline">
-        <a class="nav-link me-auto" aria-current="page" href="/products"><i class="bi bi-arrow-left"></i> Back to products</a>
+        <p><strong>Bienvenido</strong> {{user.name}}, su rol es {{user.role}}</p>
         <div class="navbar-nav d-flex justify-content-between">
             {{#if isAdmin}}
                 <a class="nav-link" href="/addProduct">Add Product</a>

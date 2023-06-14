@@ -95,10 +95,12 @@ class UserValidator{
             cart = user.carts[0].cart;
         }
 
+        user.cart = cart
+
         const time = new Date()
         const last_connection = await UserService.updateUserConnection(user.id, time)
 
-        return {user, cart: cart};
+        return user;
     }
 
     async logout(user){

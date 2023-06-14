@@ -16,7 +16,7 @@ class SessionController{
                 user = await UserValidator.userLogin(email, password);  
             }          
 
-            const token = jwt.sign({email, first_name: user.user.first_name, last_name: user.user.last_name, role: user.user.role, user_id: user.user.id, cart: user.cart}, 'pageSecret', { expiresIn: '10m' });
+            const token = jwt.sign({email, first_name: user.first_name, last_name: user.last_name, role: user.role, user_id: user.id, cart: user.cart}, 'pageSecret', { expiresIn: '10m' });
             res.cookie('secretToken', token, {maxAge: 150000, httpOnly: true})
             // -- when connected to frontend
             res.status(200).json({status: 'SUCCESSFUL'})
