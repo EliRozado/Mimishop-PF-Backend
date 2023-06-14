@@ -11,11 +11,11 @@
         <a class="nav-link me-auto" aria-current="page" href="/products"><i class="bi bi-arrow-left"></i> Back to products</a>
         <div class="navbar-nav d-flex justify-content-between">
             {{#if isAdmin}}
-                <a class="nav-link" href="/products/new">Add Product</a>
+                <a class="nav-link" href="/products/addProduct">Add Product</a>
                 <a class="nav-link" href="/admin_panel">Admin Panel</a>
             {{/if}}
             {{#if isPremium}}
-                <a class="nav-link" href="/products/new">Add Product</a>
+                <a class="nav-link" href="/products/addProduct">Add Product</a>
                 <a class="nav-link" href="/user/{{user.id}}">Profile</a>
             {{/if}}
         </div>
