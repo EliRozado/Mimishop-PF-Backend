@@ -1,0 +1,37 @@
+<nav class="navbar navbar-expand-lg bg-dark flex-column">
+    <div class="container py-1 ">
+        <div class="container-fluid d-flex justify-content-between">
+            <a class="navbar-brand text-bg-dark" href="/products">Mimi Shop</a>
+            <a class="btn btn-danger" href="/session/logout"><i class="bi bi-x-circle-fill"></i> Logout</a>
+        </div>
+    </div>
+</nav>
+<div class="navbar navbar-expand-lg bg-light mb-3">
+    <div class="container d-flex align-items-baseline">
+        <a class="nav-link me-auto" aria-current="page" href="/products"><i class="bi bi-arrow-left"></i> Back to products</a>
+        <div class="navbar-nav d-flex justify-content-between">
+            {{#if isPremium}}
+                <a class="nav-link" href="/product_panel">My Products</a>
+                <a class="nav-link" href="/addProduct">Add Product</a>
+                <a class="nav-link" href="/user/{{user.id}}">Profile</a>
+                <a class="nav-link" href="/carts/{{user.cart}}"><i class="bi bi-cart"></i></a>
+            {{/if}}
+            {{#if isUser}}
+                <a class="nav-link" href="/premium">Premium</a>
+                <a class="nav-link" href="/user/{{user.id}}">Profile</a>
+                <a class="nav-link" id="cart" cid="{{user.cart}}" href="/carts/{{user.cart}}"><i class="bi bi-cart"></i></a>
+            {{/if}}
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="card">
+        <div class="card-body">
+            <p class="lead">User Profile</p>
+            <p><strong>Full Name:</strong> {{user.name}}</p>
+            <p><strong>Email:</strong> {{user.email}}</p>
+            <p><strong>Age:</strong> {{user.age}}</p>
+            <p><strong>Role:</strong> {{user.role}}</p>
+        </div>
+    </div>
+</div>
