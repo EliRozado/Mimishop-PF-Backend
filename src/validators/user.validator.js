@@ -116,6 +116,7 @@ class UserValidator{
     async roleChangeVerify(id){
         let edit;
         let user = await UserService.findById(id);
+
         if(!user){
             throw new AppException("NOT FOUND", "User requested does not exist.", 404);
         }
@@ -137,16 +138,13 @@ class UserValidator{
         if(!files.id || !files.address || !files.status){
             throw new AppException("DOCUMENT REQUIRED", "All documents are required to continue.", 400);
         }
-        console.log('verified all docs arrived')
         documents = [
             {name: files.id[0].fieldname, reference: files.id[0].path},
             {name: files.address[0].fieldname, reference: files.address[0].path},
             {name: files.status[0].fieldname, reference: files.status[0].path}
         ]
-        console.log('created an array of docs', documents)
         const addFiles = await UserService.addDocuments(id, documents)
 
-        console.log('appended files to user')
         return addFiles;
     }
 

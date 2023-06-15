@@ -212,8 +212,6 @@ function editProductFetch(e){
     })
 }
 
-// --- Cart Functions ------------------------------------------- 
-
 function addProductToCartFetch(e){
     if(e.preventDefault) e.preventDefault();
     let id = e.target.getAttribute("pid");
@@ -246,11 +244,15 @@ function addProductToCartFetch(e){
     })
 }
 
+// --- Cart Functions ------------------------------------------- 
+
+
+
 
 // -- test
 function catchClick(e){
-    let id = e.target.getAttribute("pid");;
-    console.log(id)
+    //let id = e.target.getAttribute("pid");;
+    console.log("heard that")
 }
 
 /*

@@ -123,7 +123,6 @@ router.get('/premium', passportCall('current'), canAccess(['premium', 'user']), 
 
     const user = req.user;
 
-    console.log(user)
     const userCall = await userValidator.getUserById(user.user_id)
 
     const isPremium = user.role == "premium"
