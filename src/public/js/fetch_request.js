@@ -68,6 +68,7 @@ function registerFetch(e){
     })
 }
 
+
 // --- Premium Functions ------------------------------------------- 
 function uploadDocsFetch(e){
     if(e.preventDefault) e.preventDefault();
@@ -194,7 +195,6 @@ function editProductFetch(e){
     }).then( async response => {
         const result = await response.json()
 
-        console.log(result)
         if(response.status != 200){
             Swal.fire({
                 title: result.error,
@@ -229,7 +229,6 @@ function addProductToCartFetch(e){
     }).then( async response => {
         const result = await response.json()
 
-        console.log(result)
         if(result.status != "SUCCESSFUL"){
             Swal.fire({
                 title: result.error,
@@ -246,14 +245,81 @@ function addProductToCartFetch(e){
 
 // --- Cart Functions ------------------------------------------- 
 
+function deleteProductFromCartFetch(e){
 
-
-
-// -- test
-function catchClick(e){
-    //let id = e.target.getAttribute("pid");;
-    console.log("heard that")
 }
+
+function addQuantityFetch(e){
+
+}
+
+function minusQuantityFetch(e){
+
+}
+
+function emptyCartFetch(){
+    const website = location.href.split("/");
+    const id = website.slice(-1);
+
+    fetch(`/api/cart/${id}`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    }).then( async response => {
+        const result = await response.json()
+        if(response.status != 200){
+            Swal.fire({
+                title: result.error,
+                text: result.message
+            })
+        }else{
+            let cart = document.getElementById('cart_body');
+            cart.innerHTML = '';
+
+            let total = document.getElementById('cart_total');
+            total.innerHTML = '0';
+            Swal.fire({
+                title: 'Cart emptied',
+                text: 'All the products were deleted from the cart'
+            })
+        }
+    })
+
+}
+
+function purchaseFetch(e){
+
+}
+
+
+
+function cartActions(e){
+    // Class list of the event buttons needed: addQty, minusQty, delete, empty, purchase
+    const buttonClasses = e.target.classList
+    if(buttonClasses.contains('delete')){
+        console.log('Delete from cart button')
+    }
+
+    if(buttonClasses.contains('addQty')){
+        console.log('Add quantity')
+    }
+
+    if(buttonClasses.contains('minusQty')){
+        console.log('Subtract quantity')
+    }
+
+    if(buttonClasses.contains('empty')){
+        return emptyCartFetch()
+    }
+
+    if(buttonClasses.contains('purchase')){
+        console.log('Complete purchase')
+    }
+    
+    return false
+}
+
 
 /*
 function deleteFromCart(e){

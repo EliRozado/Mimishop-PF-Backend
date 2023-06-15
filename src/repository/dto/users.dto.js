@@ -14,8 +14,9 @@ export const userInformation = (user) => ({
         email: user.email,
         age: user.age,
         role: user.role,
+        id: user.id,
         documents: user.documents,
-        cart: user.cart
+        cart: user.carts[0].cart
     }
 )
 

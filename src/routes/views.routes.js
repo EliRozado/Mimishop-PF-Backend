@@ -10,7 +10,11 @@ import { userDocsVerifyHelper } from "../utils/userDocsVerifier.js";
 
 const router = Router();
 
-router.get('/', (req, res) => {
+router.get('/', passportCall('current'), (req, res) => {
+    if(req.user){
+        return res.redirect('/products')
+    }
+
     res.redirect('/login')
 })
 
@@ -158,6 +162,10 @@ router.get('/pwdrecover/:id', async (req, res) => {
     }else{
         res.render('newPassword', {email: request.user})
     }
+})
+
+router.get('/404', async (req, res) => {
+    res.render('error_not-found')
 })
 
 export default router;

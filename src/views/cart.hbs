@@ -16,7 +16,7 @@
     </div>
 </div>
 
-<div class="container">
+<div id="cartWrapper" class="container">
     <h1>Carrito</h1>
     <table class="table">
         <thead class="table-dark">
@@ -31,7 +31,7 @@
                 <th scope="col"></th>
             </tr>
         </thead>
-        <tbody id="cartWrapper">
+        <tbody id="cart_body">
             {{#each cart.products}}
                 <tr class="{{this.product.id}}">
                     <td> {{this.product.title}}         </td>
@@ -40,18 +40,18 @@
                     <td> {{this.product.price}} ARS     </td>
                     <td> {{this.product.stock}}         </td>
                     <td> {{this.product.category}}      </td>
-                    <td> <button type="button" pid="{{this.product.id}}" class="btn btn-light border">+</button>
-                            <span class="{{this.product.id}}" style="padding: 7px;">{{this.quantity}}</span>
-                        <button type="button" pid="{{this.product.id}}" class="btn btn-light border">-</button></td>
-                    <td> <button type="button" pid="{{this.product.id}}" onclick="catchClick()" class="btn btn-warning" ><i class="bi bi-trash3-fill"></i></button></td>
+                    <td> <button type="button" pid="{{this.product.id}}" class="addQty btn btn-light border">+</button>
+                            <span pid="{{this.product.id}}" style="padding: 7px;">{{this.quantity}}</span>
+                        <button type="button" pid="{{this.product.id}}" class="minusQty btn btn-light border">-</button></td>
+                    <td><i class="bi bi-trash3-fill btn btn-warning delete" pid="{{this.product.id}}"></i></td>
                 </tr>
             {{/each}}
         </tbody>
     </table>
     <div>
-        <p><strong>Total:</strong> <span id="quantity">0</span></p>
-        <button type="button" onclick="catchClick(e)" class="btn btn-danger text-light" >Empty Cart</button>
-        <button type="button" onclick="catchClick(e)" class="btn btn-dark text-light" >Complete Purchase</button>
+        <p><strong>Total:</strong> <span id="cart_total">0</span></p>
+        <button type="button" class="btn btn-danger text-light empty" >Empty Cart</button>
+        <button type="button" class="btn btn-dark text-light purchase" >Complete Purchase</button>
     </div>
 </div>
 

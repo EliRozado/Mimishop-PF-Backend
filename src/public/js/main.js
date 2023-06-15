@@ -5,7 +5,8 @@ const deleteProd = document.getElementById("deleteProduct");
 const addProduct = document.getElementById("addProduct");
 const editProduct = document.getElementById("editProduct");
 const premiumDocumentsUpload = document.getElementById("premiumDocumentsUpload"); // document upload form
-const becomePremium = document.getElementById("becomePremium")
+const becomePremium = document.getElementById("becomePremium") // action to become premium
+const cartWrapper = document.getElementById("cartWrapper")
 
 // * --- Fetch calls for actions in the app
 login && login.addEventListener('submit',loginFetch);
@@ -16,12 +17,15 @@ addProduct && addProduct.addEventListener('submit', newProductFetch);
 editProduct && editProduct.addEventListener('submit', editProductFetch);
 premiumDocumentsUpload && premiumDocumentsUpload.addEventListener('submit', uploadDocsFetch);
 becomePremium && becomePremium.addEventListener('click', becomePremiumFetch)
+cartWrapper && cartWrapper.addEventListener('click', cartActions)
+
 
 
 function lettersValidate(key) {
     var keycode = (key.which) ? key.which : key.keyCode;
+    console.log(keycode);
 
-    if ((keycode > 64 && keycode < 91) || (keycode > 96 && keycode < 123))  
+    if (keycode == 32 || (keycode > 64 && keycode < 91) || (keycode > 96 && keycode < 123) )  
     {     
         return true;    
     }
