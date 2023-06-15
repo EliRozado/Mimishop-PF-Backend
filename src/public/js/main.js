@@ -4,13 +4,18 @@ const addToCartButton = document.getElementById("addToCart");
 const deleteProd = document.getElementById("deleteProduct");
 const addProduct = document.getElementById("addProduct");
 const editProduct = document.getElementById("editProduct");
+const premiumDocumentsUpload = document.getElementById("premiumDocumentsUpload"); // document upload form
+const becomePremium = document.getElementById("becomePremium")
 
+// * --- Fetch calls for actions in the app
 login && login.addEventListener('submit',loginFetch);
 register && register.addEventListener('submit', registerFetch);
 addToCartButton && addToCartButton.addEventListener('click', addProductToCartFetch);
 deleteProd && deleteProd.addEventListener('click', deleteProductFetch);
 addProduct && addProduct.addEventListener('submit', newProductFetch);
-editProduct && editProduct.addEventListener('submit', editProductFetch)
+editProduct && editProduct.addEventListener('submit', editProductFetch);
+premiumDocumentsUpload && premiumDocumentsUpload.addEventListener('submit', uploadDocsFetch);
+becomePremium && becomePremium.addEventListener('click', becomePremiumFetch)
 
 
 function lettersValidate(key) {

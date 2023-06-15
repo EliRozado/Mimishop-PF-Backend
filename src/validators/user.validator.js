@@ -4,6 +4,7 @@ import { isValidPass, hashPassword } from "../utils/sessionUtils.js";
 
 import { deletedAccount } from "../config/mailing.config.js";
 import { userInformation } from "../repository/dto/users.dto.js";
+import { userDocsVerifyHelper } from "../utils/userDocsVerifier.js";
 
 class UserValidator{
     async getAllUsers(){
@@ -118,14 +119,12 @@ class UserValidator{
         if(!user){
             throw new AppException("NOT FOUND", "User requested does not exist.", 404);
         }
+        const documents = userDocsVerifyHelper(user);
 
-        if(user.role == 'user'){
-            //* add validation of uploaded documents for user -> premium
-
+        if(documents){
             edit = UserService.changeRole(id, {role: 'premium'});
-        }else if(user.role == 'premium'){
-            edit = UserService.changeRole(id, {role: 'user'})
-        }
+        }else{
+            throw new AppException("MISSING DOCUMENTS", "Documents required to upgrade to premium may be missing, please contact a system administrator for help", 404);        }
 
         return edit;
     }
@@ -134,18 +133,20 @@ class UserValidator{
         const user = UserService.findById(id);
         
         let documents = [];
+
         if(!files.id || !files.address || !files.status){
             throw new AppException("DOCUMENT REQUIRED", "All documents are required to continue.", 400);
         }
-        
+        console.log('verified all docs arrived')
         documents = [
             {name: files.id[0].fieldname, reference: files.id[0].path},
             {name: files.address[0].fieldname, reference: files.address[0].path},
             {name: files.status[0].fieldname, reference: files.status[0].path}
         ]
-
+        console.log('created an array of docs', documents)
         const addFiles = await UserService.addDocuments(id, documents)
 
+        console.log('appended files to user')
         return addFiles;
     }
 

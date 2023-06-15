@@ -6,6 +6,7 @@ import ProductValidator from "../validators/product.validator.js";
 import PasswordRecoveryValidator from "../validators/pwdRecovery.validator.js";
 import cartValidator from "../validators/cart.validator.js";
 import userValidator from "../validators/user.validator.js";
+import { userDocsVerifyHelper } from "../utils/userDocsVerifier.js";
 
 const router = Router();
 
@@ -115,17 +116,21 @@ router.get('/register', async (req, res) => {
     res.render('register')
 })
 
-router.get('/premium',passportCall('current'), canAccess(['premium', 'user']),  async (req, res) => {
+router.get('/premium', passportCall('current'), canAccess(['premium', 'user']),  async (req, res) => {
     if (!req.user) {
         return res.redirect('/login')
     }
 
     const user = req.user;
 
+    console.log(user)
+    const userCall = await userValidator.getUserById(user.user_id)
+
     const isPremium = user.role == "premium"
     const isUser = user.role == "user"
+    const userDocs = userDocsVerifyHelper(userCall)
 
-    res.render('premium', {user, isPremium, isUser})
+    res.render('premium', {user, isPremium, isUser, userDocs})
 })
 
 // -- view for "generete a password recovery request"

@@ -13,12 +13,12 @@
             {{#if isPremium}}
                 <a class="nav-link" href="/premium">Premium</a>
                 <a class="nav-link" href="/addProduct">Add Product</a>
-                <a class="nav-link" href="/user/{{user.id}}">Profile</a>
+                <a class="nav-link" id="profile" href="/user/{{user.user_id}}">Profile</a>
                 <a class="nav-link" href="/carts/{{user.cart}}"><i class="bi bi-cart"></i></a>
             {{/if}}
             {{#if isUser}}
                 <a class="nav-link" href="/premium">Premium</a>
-                <a class="nav-link" href="/user/{{user.id}}">Profile</a>
+                <a class="nav-link" id="profile" href="/user/{{user.user_id}}">Profile</a>
                 <a class="nav-link" id="cart" cid="{{user.cart}}" href="/carts/{{user.cart}}"><i class="bi bi-cart"></i></a>
             {{/if}}
         </div>
@@ -31,38 +31,46 @@
             <p class="mx-3">Becoming a premium user allows you to sell in the site, you will be able to post and manage your own products.</p>
             <p class="mx-3"> For that reason, we require users to verify their identities. If you would like to become a premium member, please fill the form below with the requested documents.</p>        
             <p class="mx-3">Allowed formats for documents are: .png, .jpg and .jpeg</p>
-            <form class="m-3" id="premiumDocumentsUpload">
-                <div class="mb-3">
-                    <label for="id" class="form-label">ID *</label>
-                    <input type="file" class="form-control" name="id" aria-describedby="id" accept=".png,.jpg,.jpeg,image/png,image/jpg,image/jpeg" required>
-                    <small id="passwordHelpBlock" class="form-text text-muted">
-                        This document should be either your ID.
-                    </small>
+
+            {{#if userDocs}}
+                <div id="uploadSuccess" class="text-center">
+                    <p><i class="bi bi-check-circle text-success"></i> Documents were successfully uploaded before</p>
+                    <button id="becomePremium" type="submit" class="btn btn-primary">Become premium</button>
                 </div>
-                <div class="mb-3">
-                    <label for="address" class="form-label">Address *</label>
-                    <input type="file" class="form-control" name="address" aria-describedby="address" accept=".png,.jpg,.jpeg,image/png,image/jpg,image/jpeg" required>
-                    <small id="passwordHelpBlock" class="form-text text-muted">
-                        This document can be any service bill that confirms your address.
-                    </small>
+            {{else}}
+                <form class="m-3" id="premiumDocumentsUpload">
+                    <div class="mb-3">
+                        <label for="id" class="form-label">ID *</label>
+                        <input id="id_doc" type="file" class="form-control" name="id" aria-describedby="id" accept=".png,.jpg,.jpeg,image/png,image/jpg,image/jpeg" required>
+                        <small id="passwordHelpBlock" class="form-text text-muted">
+                            This document should be either your ID.
+                        </small>
+                    </div>
+                    <div class="mb-3">
+                        <label for="address" class="form-label">Address *</label>
+                        <input id="address_doc" type="file" class="form-control" name="address" aria-describedby="address" accept=".png,.jpg,.jpeg,image/png,image/jpg,image/jpeg" required>
+                        <small id="passwordHelpBlock" class="form-text text-muted">
+                            This document can be any service bill that confirms your address.
+                        </small>
+                    </div>
+                    <div class="mb-3">
+                        <label for="status" class="form-label">Account status *</label>
+                        <input id="status_doc" type="file" class="form-control" name="status" aria-describedby="status" accept=".png,.jpg,.jpeg,image/png,image/jpg,image/jpeg" required>
+                        <small id="passwordHelpBlock" class="form-text text-muted">
+                            This document confirms that your bank account status is okay.
+                        </small>
+                    </div>
+                    <button id="premiumFormButton" type="submit" class="btn btn-primary">Submit</button>
+                </form>
+                <div id="uploadProgress" class="text-center d-none">
+                    <p>Upload in progress..</p>
+                    <progress id="progressbar" max="100" value="0"></progress>
                 </div>
-                <div class="mb-3">
-                    <label for="status" class="form-label">Account status *</label>
-                    <input type="file" class="form-control" name="status" aria-describedby="status" accept=".png,.jpg,.jpeg,image/png,image/jpg,image/jpeg" required>
-                    <small id="passwordHelpBlock" class="form-text text-muted">
-                        This document confirms that your bank account status is okay.
-                    </small>
+                <div id="uploadSuccess" class="text-center d-none">
+                    <p><i class="bi bi-check-circle text-success"></i> Upload successful</p>
+                    <button id="becomePremium" type="submit" class="btn btn-primary">Become premium</button>
                 </div>
-                <button  type="submit" class="btn btn-primary">Submit</button>
-            </form>
-            <div id="uploadProgress" class="text-center">
-                <p>Upload in progress..</p>
-                <progress id="progressbar" max="100" value="0"></progress>
-            </div>
-            <div id="uploadSuccess" class="text-center">
-                <p><i class="bi bi-check-circle text-success"></i> Upload successful</p>
-                <button  type="submit" class="btn btn-primary">Become premium</button>
-            </div>
+            {{/if}}
         {{else}}    
             <div class="text-center">
                 <i class="bi bi-check-circle display-1 text-success"></i>

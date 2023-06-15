@@ -74,7 +74,7 @@ class UsersController{
         try{
             const user = await UserValidator.roleChangeVerify(req.params.id);
 
-            return res.status(201).send(`User ${req.params.id} role was changed to ${user.role}`)
+            return res.status(201).send({status: 'SUCCESFUL', message: `User ${req.params.id} role was changed to ${user.role}`})
         }catch(err){
             let error = MongoErrorHandler(err) || err;
 
@@ -94,7 +94,8 @@ class UsersController{
         }catch(err){
             let error = MongoErrorHandler(err) || err;
 
-            if(err.name == 'Error'){
+            if(!err.status){
+                console.log(err)
                 return res.status(500).json({ error: 'UNHANDLED ERROR', message: err.message})
             }
 
@@ -110,7 +111,7 @@ class UsersController{
         }catch(err){
             let error = MongoErrorHandler(err) || err;
 
-            if(err.name == 'Error'){
+            if(!err.status){
                 return res.status(500).json({ error: 'UNHANDLED ERROR', message: err.message})
             }
 
