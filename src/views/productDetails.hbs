@@ -18,37 +18,46 @@
 <div class="container">
     <div class="card">
         <div class="card-body">
-        {{#with product}}
-            {{#if image}}
-                <img src="{{image}}"/>
-            {{/if}}   
-        <h3>{{title}}</h3>
-        <p>{{description}}</p>
-        <p><strong>Seller:</strong> {{owner}}</p>
         <div class="row">
-            <div class="col-5">
-                <table class="table table-bordered">
-                    <tbody>
-                        <tr>
-                            <th class="table-info" scope="row">Code</th>
-                            <td>{{code}}</td>
-                        </tr>
-                        <tr>
-                            <th class="table-info" scope="row">Stock</th>
-                            <td>{{stock}}</td>
-                        </tr>
-                        <tr>
-                            <th class="table-info" scope="row">Category</th>
-                            <td colspan="2">{{category}}</td>
-                        </tr>
-                        <tr>
-                            <th class="table-info" scope="row">Price</th>
-                            <td colspan="2">{{price}} ARS</td>
-                        </tr>
-                    </tbody>
-                </table>
+            {{#with product}}
+            <div class="col-4">
+                
+                {{#if thumbnails}}
+                    {{#each thumbnails}}
+                        <img style="max-width:350px;" src="{{this}}"/>
+                    {{/each}}  
+                {{else}}
+                    <b>default img</b>
+                {{/if}} 
             </div>
-        </div>
+            <h3>{{title}}</h3>
+            <p>{{description}}</p>
+            <p><strong>Seller:</strong> {{owner}}</p>
+            <div class="row">
+                <div class="col-5">
+                    <table class="table table-bordered">
+                        <tbody>
+                            <tr>
+                                <th class="table-info" scope="row">Code</th>
+                                <td>{{code}}</td>
+                            </tr>
+                            <tr>
+                                <th class="table-info" scope="row">Stock</th>
+                                <td>{{stock}}</td>
+                            </tr>
+                            <tr>
+                                <th class="table-info" scope="row">Category</th>
+                                <td colspan="2">{{category}}</td>
+                            </tr>
+                            <tr>
+                                <th class="table-info" scope="row">Price</th>
+                                <td colspan="2">{{price}} ARS</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            </div>
         {{/with}}
         <div>
             {{#if isOwner}}

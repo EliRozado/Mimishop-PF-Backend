@@ -12,11 +12,12 @@ class SessionController{
             
             if(email == admin.user && password == admin.password){
                 user = {...admin}
+                user.email = admin.user
             }else{
                 user = await UserValidator.userLogin(email, password);  
             }          
 
-            console.log(`User ${user.email} has logged in`)
+            console.log(`${new Date()}: User ${user.email} has logged in`)
 
             const token = jwt.sign({email, first_name: user.first_name, last_name: user.last_name, role: user.role, user_id: user.id, cart: user.cart}, 'pageSecret', { expiresIn: '30m' });
             res.cookie('secretToken', token, {maxAge: 900000, httpOnly: true})
@@ -39,12 +40,12 @@ class SessionController{
         try{
             const user = await UserValidator.registerUser(req.body);
 
-            res.status(201).json({status: 'SUCCESS'})
-            // res.status(201).json({status: 'SUCCESS', user: user});
+            res.status(201).json({status: 'SUCCESS', user: user})
         }catch(err){
             let error = MongoErrorHandler(err) || err;
 
             if(!err.status){
+                console.log(err)
                 return res.status(500).json({ error: 'UNHANDLED ERROR', message: err.message})
             }
 

@@ -2,6 +2,7 @@ import { ProductService } from "../repository/index.repository.js";
 import AppException from '../utils/customErrors/AppException.js'
 import { deletedProduct } from "../config/mailing.config.js";
 import fs from 'fs/promises';
+import fsSync from 'fs'
 
 class ProductValidator{
     async getProducts(filters){
@@ -55,6 +56,8 @@ class ProductValidator{
         let owner;
         let thumbnails = [];
 
+        const website = req.protocol + '://' + req.get('host');
+
         if(req.user.role == 'premium') {
             owner = req.user.email
         }else if(req.user.role == 'admin') owner = 'admin'
@@ -68,7 +71,9 @@ class ProductValidator{
         
         if(req.files){ if(req.files.length){
             req.files.forEach(img => {
-                thumbnails.push(img.path)
+
+                const path = `${website}/static/files/products/${img.filename}`;
+                thumbnails.push(path)
             });
         }}
 
@@ -113,11 +118,15 @@ class ProductValidator{
 
         if(productInfo.thumbnails.length){
             productInfo.thumbnails.forEach((img) => {
-                fs.unlink((img))
+                if(fsSync.existsSync(img)){
+                    fs.unlink(img)
+                }
             })
         };
 
-        const email = await deletedProduct(productInfo);
+        if(productInfo.owner != 'admin'){
+            const email = await deletedProduct(productInfo);
+        }
 
         const product = await ProductService.deleteProduct(pid);
 

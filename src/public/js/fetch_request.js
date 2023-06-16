@@ -144,13 +144,15 @@ function becomePremiumFetch(e){
 function newProductFetch(e){
     if(e.preventDefault) e.preventDefault();
     let fileInput = document.querySelector(('input[type="file"]'))
-    let count = fileInput.files.length;
+    let count = fileInput.files[0];
+
+    console.log(count)
 
     const data = new FormData(addProduct);    
     console.log(data)
 
     for(let x = 0; x < count; x++){
-        data.append("files[]", fileInput.files[x], fileInput.files[x].name)
+        data.append("thumbnails[]", fileInput.files[0], fileInput.files[0].name)
     }
 
     console.log(data)
@@ -242,6 +244,35 @@ function addProductToCartFetch(e){
         }
     })
 }
+
+function deleteProductFetch(e){
+    if(e.preventDefault) e.preventDefault();
+    let id = e.target.getAttribute("pid");
+
+    fetch(`/api/products/${id}`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    }).then( async response => {
+        const result = await response.json()
+
+        if(response.status != 200){
+            Swal.fire({
+                title: result.error,
+                text: result.message
+            })
+        }else{
+            Swal.fire({
+                title: result.status,
+                text: result.message
+            })
+            window.setTimeout(function(){
+                window.location.replace("/products")
+            }, 2000);
+        }
+    })
+} 
 
 // --- Cart Functions ------------------------------------------- 
 

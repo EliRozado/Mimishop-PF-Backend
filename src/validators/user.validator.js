@@ -3,7 +3,7 @@ import AppException from '../utils/customErrors/AppException.js'
 import { isValidPass, hashPassword } from "../utils/sessionUtils.js";
 
 import { deletedAccount } from "../config/mailing.config.js";
-import { userInformation } from "../repository/dto/users.dto.js";
+import { userInformation, userRegister } from "../repository/dto/users.dto.js";
 import { userDocsVerifyHelper } from "../utils/userDocsVerifier.js";
 
 class UserValidator{
@@ -68,7 +68,7 @@ class UserValidator{
         };
 
         const newUser = await UserService.createUser(newUserInfo)
-        return userInformation(newUser);
+        return userRegister(newUser);
     }
 
     async userLogin(email, password){
@@ -132,6 +132,7 @@ class UserValidator{
 
     async documentVerify(id, files){
         const user = UserService.findById(id);
+        const website = req.protocol + '://' + req.get('host');
         
         let documents = [];
 
@@ -139,9 +140,9 @@ class UserValidator{
             throw new AppException("DOCUMENT REQUIRED", "All documents are required to continue.", 400);
         }
         documents = [
-            {name: files.id[0].fieldname, reference: files.id[0].path},
-            {name: files.address[0].fieldname, reference: files.address[0].path},
-            {name: files.status[0].fieldname, reference: files.status[0].path}
+            {name: files.id[0].fieldname, reference: `${website}/static/files/documents/${files.id[0].filename}`},
+            {name: files.address[0].fieldname, reference: `${website}/static/files/documents/${files.address[0].filename}`},
+            {name: files.status[0].fieldname, reference: `${website}/static/files/documents/${files.status[0].filename}`}
         ]
         const addFiles = await UserService.addDocuments(id, documents)
 
@@ -150,10 +151,8 @@ class UserValidator{
 
     async deleteInactiveUsers(){
         const time = new Date();
-        // half an hour
-        const last_connection = time - 5 * 60 * 6000; 
-        // two days
-        // const last_connection = time - 480 * 60 * 6000;
+
+        const last_connection = time - 480 * 60 * 6000;
 
         const users = await UserService.findByLastConnection(new Date(last_connection));
 

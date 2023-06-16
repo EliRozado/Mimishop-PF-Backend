@@ -21,8 +21,9 @@ class PasswordRecoveryValidator{
         // - Create a new link for password recovery
         const request = await PasswordRecoveryService.createLink({user: email});
 
+        const website = req.protocol + '://' + req.get('host');
         // - Send the email with the created link
-        const sendEmail = passwordRecoveryEmail(email, request.id)
+        const sendEmail = passwordRecoveryEmail(email, website, request.id)
 
         return {message: 'Email sent!'}
     }

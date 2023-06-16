@@ -1,4 +1,5 @@
 const getUsersDTO = (user) => ({
+    id: user.id,
     name: user.first_name + ' ' + user.last_name,
     email: user.email,
     role: user.role
@@ -18,6 +19,16 @@ export const userInformation = (user) => ({
         documents: user.documents,
         cart: user.carts[0].cart
     }
+)
+
+export const userRegister = (user) => ({
+    name: user.first_name + ' ' + user.last_name,
+    email: user.email,
+    age: user.age,
+    role: user.role,
+    id: user.id,
+    documents: user.documents
+}
 )
 
 export const userDTO = (user) => (

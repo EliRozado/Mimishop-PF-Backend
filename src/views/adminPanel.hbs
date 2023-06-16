@@ -1,0 +1,47 @@
+<nav class="navbar navbar-expand-lg bg-dark flex-column">
+    <div class="container py-1 ">
+        <div class="container-fluid d-flex justify-content-between">
+            <a class="navbar-brand text-bg-dark" href="/products">Mimi Shop</a>
+            <a class="btn btn-danger" href="/session/logout"><i class="bi bi-x-circle-fill"></i> Logout</a>
+        </div>
+    </div>
+</nav>
+<div class="navbar navbar-expand-lg bg-light mb-3">
+    <div class="container d-flex align-items-baseline">
+        <a class="nav-link me-auto" aria-current="page" href="/products"><i class="bi bi-arrow-left"></i> Back to products</a>
+        <div class="navbar-nav d-flex justify-content-between ">
+            <a class="nav-link" href="/addProduct">Add Product</a>
+        </div>
+    </div>
+</div>
+
+<div class="container my-3 py-3">
+    <div class="container-sm bg-body-secondary p-3" style="border-radius: 20px;">
+        <h2>Admin Panel</h2>
+        <p>General panel to manage site users, you can perform the following actions:</p>
+        <ul>
+            <li>change a user's role from user to premium and viceversa</li>
+            <li>delete an specific user from the system</li>
+            <li>purge inactive users</li>
+        </ul>
+        <table class="table table-striped border-bottom border-dark">
+            <thead class="table-dark">
+                <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">User/Email</th>
+                    <th scope="col">Role</th>
+                    <th scope="col">Change Role</th>
+                    <th scope="col">Delete</th>
+                </tr>
+            </thead>
+            <tbody id="user_table">
+            </tbody>
+        </table>
+        <button id="purge_button" type="button" class="btn btn-danger">Purge inactive users</button>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+<script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+<script src="./../static/js/connection.js"></script>

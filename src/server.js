@@ -14,6 +14,9 @@ import passport from "passport";
 
 import indexRoutes from './routes/index.routes.js';
 import bodyParser from "body-parser";
+import userValidator from './validators/user.validator.js';
+
+import { Server } from "socket.io";
 
 // - application
 const app = express();
@@ -42,4 +45,29 @@ app.set('view engine', 'hbs');
 app.set('views', `${__dirname}/views`);
 
 // - server start
-app.listen(config.PORT, () => console.log(`Server up in port ${config.PORT}`))
+const server = app.listen(config.PORT, () => console.log(`Server up in port ${config.PORT}`))
+const io = new Server(server);
+
+io.on('connection', async (socket) => {
+    console.log('Admin panel connected');
+
+    io.sockets.emit('users', await userValidator.getAllUsers())
+
+    socket.on('change_role', async (data) => {
+        await userValidator.changeUserRole(data.uid, data.role)
+        
+        io.sockets.emit('users', await userValidator.getAllUsers())
+    })
+
+    socket.on('user_delete', async (data) => {
+        await userValidator.deleteUser(data.uid)
+
+        io.sockets.emit('users', await userValidator.getAllUsers())
+    })
+
+    socket.on('purge_users', async () => {
+        await userValidator.deleteInactiveUsers();
+
+        io.sockets.emit('users', await userValidator.getAllUsers())
+    })
+})

@@ -19,8 +19,6 @@ premiumDocumentsUpload && premiumDocumentsUpload.addEventListener('submit', uplo
 becomePremium && becomePremium.addEventListener('click', becomePremiumFetch)
 cartWrapper && cartWrapper.addEventListener('click', cartActions)
 
-
-
 function lettersValidate(key) {
     var keycode = (key.which) ? key.which : key.keyCode;
     console.log(keycode);
