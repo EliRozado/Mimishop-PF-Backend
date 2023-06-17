@@ -48,8 +48,9 @@ app.set('views', `${__dirname}/views`);
 const server = app.listen(config.PORT, () => console.log(`Server up in port ${config.PORT}`))
 const io = new Server(server);
 
+// ----- socket
 io.on('connection', async (socket) => {
-    console.log('Admin panel connected');
+    console.log(socket.id)
 
     io.sockets.emit('users', await userValidator.getAllUsers())
 

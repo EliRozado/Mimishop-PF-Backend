@@ -7,7 +7,7 @@ import PasswordRecoveryValidator from "../validators/pwdRecovery.validator.js";
 import cartValidator from "../validators/cart.validator.js";
 import userValidator from "../validators/user.validator.js";
 import { userDocsVerifyHelper } from "../utils/userDocsVerifier.js";
-import { UserService } from "../repository/index.repository.js";
+
 
 const router = Router();
 
@@ -62,9 +62,12 @@ router.get('/carts/:cid', passportCall('current'), async (req,res) => {
 
     const cart = await cartValidator.getCartByID(req.params.cid)
 
+    let total = 0;
+    cart.products.forEach((product) => total += product.product.price*product.quantity)
+
     const user = req.user.user_id;
 
-    res.render('cart', { cart, user })
+    res.render('cart', { cart, user, total })
 })
 
 router.get('/user/:uid', passportCall('current'), async (req,res) => {

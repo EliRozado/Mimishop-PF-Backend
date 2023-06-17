@@ -14,7 +14,7 @@ class ProductDao{
     }
 
     update(id, data){
-        return productModel.findByIdAndUpdate(id, data, {new: true, runValidators: true});
+        return productModel.findByIdAndUpdate(id, data, {new: true});
     }
 
     delete(id){

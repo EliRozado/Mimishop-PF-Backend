@@ -6,6 +6,8 @@ const premiumFormButton = document.getElementById("premiumFormButton");
 const uploadProgress = document.getElementById("uploadProgress"); // progress bar container box
 const progressbar = document.getElementById("progressbar"); // doc upload progress bar
 const uploadSuccess = document.getElementById("uploadSuccess"); // upload successful box
+const cart_total = document.getElementById('cart_total');
+const cart_body = document.getElementById('cart_body')
 
 // checks if the documents are correctly linked
 console.log('connected!')
@@ -275,17 +277,127 @@ function deleteProductFetch(e){
 } 
 
 // --- Cart Functions ------------------------------------------- 
-
 function deleteProductFromCartFetch(e){
+    const website = location.href.split("/");
+    const cid = website.slice(-1);
+    const pid = e.target.getAttribute("pid")
+    const p_line = document.querySelector('.line-'+pid);
+    const p_qty = document.querySelector('.qty-'+pid).innerHTML;
+    const p_price = document.querySelector('.price-'+pid).innerHTML;
+
+    let total_calc = cart_total.innerHTML;
+
+    fetch(`/api/cart/${cid}/product/${pid}`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    }).then( async response => {
+        const result = await response.json()
+        if(response.status != 200){
+            Swal.fire({
+                title: result.error,
+                text: result.message
+            })
+        }else{
+            total_calc = total_calc - p_qty*p_price;
+            cart_total.innerHTML = total_calc;
+            p_line.remove();
+
+            Swal.fire({
+                title: 'Product removed from cart',
+                text: 'The product you selected was removed from the cart'
+            })
+        }
+    })
 
 }
 
 function addQuantityFetch(e){
+    // *- catch ids
+    const website = location.href.split("/");
+    const cid = website.slice(-1);
+    const pid = e.target.getAttribute("pid")
+    // *- Items to modify
+    const p_qty = document.querySelector('.qty-'+pid);
+    const p_price = parseInt(document.querySelector('.price-'+pid).innerHTML);
+    //*- Values
+    let total = parseInt(cart_total.innerHTML);
+    let new_qty = parseInt(p_qty.innerHTML) +1;
 
+    const add = {quantity: 1}
+
+    fetch(`/api/cart/${cid}/product/${pid}`, {
+        method: 'PUT',
+        headers: {
+            'Content-type': 'application/json'
+        },
+        body: JSON.stringify(add)
+    }).then( async response => {
+        const result = await response.json()
+        if(response.status != 200){
+            Swal.fire({
+                title: result.error,
+                text: result.message
+            })
+        }else{
+            let new_total = total + p_price;
+
+            p_qty.innerHTML = new_qty;
+            cart_total.innerHTML = new_total;
+
+            Swal.fire({
+                title: 'Added quantity',
+                text: 'Added more of the selected product to the cart'
+            })
+        }
+    })
 }
 
 function minusQuantityFetch(e){
+    // *- catch ids
+    const website = location.href.split("/");
+    const cid = website.slice(-1);
+    const pid = e.target.getAttribute("pid")
+    // *- Items to modify
+    const p_qty = document.querySelector('.qty-'+pid);
+    const p_price = parseInt(document.querySelector('.price-'+pid).innerHTML);
+    //*- Values
+    let total = parseInt(cart_total.innerHTML);
+    let new_qty = parseInt(p_qty.innerHTML) -1;
 
+    const subtract = {quantity: -1}
+
+    // * -- Now if new_qty = 0, delete product from the cart.
+    if(new_qty <= 0){
+        deleteProductFromCartFetch(e)
+    }else{
+        fetch(`/api/cart/${cid}/product/${pid}`, {
+            method: 'PUT',
+            headers: {
+                'Content-type': 'application/json'
+            },
+            body: JSON.stringify(subtract)
+        }).then( async response => {
+            const result = await response.json()
+            if(response.status != 200){
+                Swal.fire({
+                    title: result.error,
+                    text: result.message
+                })
+            }else{
+                let new_total = total - p_price;
+    
+                p_qty.innerHTML = new_qty;
+                cart_total.innerHTML = new_total;
+    
+                Swal.fire({
+                    title: 'Subtracted quantity',
+                    text: 'Took one of from the cart'
+                })
+            }
+        })
+    }
 }
 
 function emptyCartFetch(){
@@ -305,10 +417,8 @@ function emptyCartFetch(){
                 text: result.message
             })
         }else{
-            let cart = document.getElementById('cart_body');
             cart.innerHTML = '';
 
-            let total = document.getElementById('cart_total');
             total.innerHTML = '0';
             Swal.fire({
                 title: 'Cart emptied',
@@ -323,21 +433,19 @@ function purchaseFetch(e){
 
 }
 
-
-
 function cartActions(e){
     // Class list of the event buttons needed: addQty, minusQty, delete, empty, purchase
     const buttonClasses = e.target.classList
     if(buttonClasses.contains('delete')){
-        console.log('Delete from cart button')
+        deleteProductFromCartFetch(e)
     }
 
     if(buttonClasses.contains('addQty')){
-        console.log('Add quantity')
+        addQuantityFetch(e)
     }
 
     if(buttonClasses.contains('minusQty')){
-        console.log('Subtract quantity')
+        minusQuantityFetch(e)
     }
 
     if(buttonClasses.contains('empty')){

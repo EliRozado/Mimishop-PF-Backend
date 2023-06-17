@@ -89,44 +89,82 @@ class CartValidator{
         const id = req.params.id;
         const user = req.user;
 
-        if(!id) {
-            throw new AppException('REQUIRED DATA', 'Cart ID is required.', 400)
-        };
+        let processed = []
+        let notProcessed = []
+        let total = 0;
+
+        if(!id) { throw new AppException('REQUIRED DATA', 'Cart ID is required.', 400) };
 
         const purchaser = user.email;
 
         let cart = await CartService.getCartByID(id);
-        if(!cart.products.length) {
-            throw new AppException('CART IS EMPTY', 'Cart is empty', 400)
-        };
+        if(!cart.products.length) { throw new AppException('CART IS EMPTY', 'Cart is empty', 400) };
 
-        const notProcessed = []
-        let total = 0;
-        let product = 0;
+        
 
         // -- processing the cart products
-        cart.products.forEach( async item => {
+        /*let processProducts = new Promise((resolver, reject) => {
+            cart.products.forEach( (item) => {
+                
+                if(item.quantity <= item.product.stock){
+                    // -- if enough stock
+                    
+                    let updatedStock = item.product.stock - item.quantity;
+                    await ProductService.updateProduct(item.product.id, {stock: updatedStock})
+    
+                    let price = item.quantity*item.product.price;
+    
+                    totalArray.push(price);
+                    // -- delete product from the cart
+                    await CartService.deleteProduct(id, item.product.id);
+    
+                }else{
+                    // *- not enough stock
+                    notProcessed.push(item.product.id)
+                };
+            })
+        }).then(()=>{ 
+            for (const i of totalArray) {
+                total += totalArray[i]
+            }
+        })*/
+/*
+        cart.products.forEach( async (item) => {
+            console.log(item)
+            
             if(item.quantity <= item.product.stock){
                 // -- if enough stock
+                
                 let updatedStock = item.product.stock - item.quantity;
-                ProductService.updateProduct(item.product.id, {stock: updatedStock})
+                await ProductService.updateProduct(item.product.id, {stock: updatedStock})
 
-                total += item.quantity*item.product.price;
+                let price = item.quantity*item.product.price;
+
+                totalArray.push(price);
                 // -- delete product from the cart
                 await CartService.deleteProduct(id, item.product.id);
 
             }else{
+                // *- not enough stock
                 notProcessed.push(item.product.id)
             };
-        })
+        })*/
+        
+        console.log(totalArray, total)
+        
 
-        if( total == 0 ){
+        console.log('total:' +total)
+        if( total === 0 ){
             return {status: 'UNSUCCESSFUL', message: "The purchase couldn't be completed due to limited stock of the items selected."};
         }
 
-        let ticket = await TicketValidator.createTicket({total, purchaser});
+        let ticket = await TicketValidator.createTicket({total: total, purchaser});
 
-        return {status: 'SUCCESSFUL', ticket: ticket, notProcessed: notProcessed};
+        if(notProcessed.length){
+            return {status: 'PARTLY SUCCESSFUL', message:'Some products were not processed due to limited stock, try again another time or contact the sellers directly!', ticket: ticket, notProcessed: notProcessed}
+        }
+
+        return {status: 'SUCCESSFUL', message: 'Purchase submitted', ticket: ticket, notProcessed: notProcessed};
     }
     
 }
