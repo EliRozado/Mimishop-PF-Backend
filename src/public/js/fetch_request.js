@@ -222,7 +222,6 @@ function addProductToCartFetch(e){
     let cart = cartIcon.getAttribute("cid");
 
     const data = [{product: id}];
-    console.log({id, cart})
     
     fetch(`/api/cart/${cart}`, {
         method: 'PUT',
@@ -346,10 +345,10 @@ function addQuantityFetch(e){
             p_qty.innerHTML = new_qty;
             cart_total.innerHTML = new_total;
 
-            Swal.fire({
-                title: 'Added quantity',
-                text: 'Added more of the selected product to the cart'
-            })
+            Toastify({
+                text: "Added more product quantity to the cart",
+                duration: 3000
+            }).showToast();
         }
     })
 }
@@ -391,10 +390,10 @@ function minusQuantityFetch(e){
                 p_qty.innerHTML = new_qty;
                 cart_total.innerHTML = new_total;
     
-                Swal.fire({
-                    title: 'Subtracted quantity',
-                    text: 'Took one of from the cart'
-                })
+                Toastify({
+                    text: "Subtracted quantity of the product from the cart",
+                    duration: 3000
+                }).showToast();
             }
         })
     }
@@ -417,20 +416,56 @@ function emptyCartFetch(){
                 text: result.message
             })
         }else{
-            cart.innerHTML = '';
+            cart_body.innerHTML = '';
 
-            total.innerHTML = '0';
+            cart_total.innerHTML = '0';
             Swal.fire({
                 title: 'Cart emptied',
                 text: 'All the products were deleted from the cart'
             })
         }
     })
-
 }
 
 function purchaseFetch(e){
+    const website = location.href.split("/");
+    const cid = website.slice(-1);
 
+    fetch(`/api/cart/${cid}/purchase`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    }).then(async response => {
+        const result = await response.json()
+        console.log(result)
+        if(response.status != 200){
+            Swal.fire({
+                title: result.error,
+                text: result.message
+            })
+        }else if(result.status == "SUCCESSFUL"){
+            Swal.fire({
+                title: 'Purchase processed',
+                text: `Your purchase has been successfully processed! \n \n Ticket: ${result.ticket.code} \n Purchase total: ${result.ticket.amount} `
+            })
+            cart_body.innerHTML = ''
+            cart_total.innerHTML = 0
+        }else if(result.status == "UNSUCCESSFUL"){
+            Swal.fire({
+                title: 'Purchase could not be processed',
+                text: 'There is not enough stock for the items that are currently in the cart, please try again another time or contact the sellers if you are interested in purchasing!'
+            })
+        }else{
+            Swal.fire({
+                title: 'Purchase partly processed',
+                text: `A couple of products in the cart could not bre processed due to a lack of stock, please try again another time or contact the sellers if you are interested in purchasing! \n \n Ticket: ${result.ticket.code} \n Total: ${result.ticket.amount}`
+            })
+            window.setTimeout(function(){
+                location.reload()
+            }, 3000);
+        } 
+    })
 }
 
 function cartActions(e){
@@ -453,7 +488,7 @@ function cartActions(e){
     }
 
     if(buttonClasses.contains('purchase')){
-        console.log('Complete purchase')
+        purchaseFetch(e)
     }
     
     return false
