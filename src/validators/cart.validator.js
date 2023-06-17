@@ -110,17 +110,17 @@ class CartValidator{
             }
         })
 
+        if( total === 0 ){
+            return {status: 'UNSUCCESSFUL', message: "The purchase couldn't be completed due to limited stock of the items selected."};
+        } 
+
+        let ticket = await TicketValidator.createTicket({total: total, purchaser});
+
         for await (const product of processed){
             await ProductService.updateProduct(product.id, {stock: product.stock})
             await CartService.deleteProduct(cid, product.id);
         }
-
-        if( total === 0 ){
-            return {status: 'UNSUCCESSFUL', message: "The purchase couldn't be completed due to limited stock of the items selected."};
-        }        
         
-        let ticket = await TicketValidator.createTicket({total: total, purchaser});
-
         if(notProcessed.includes(null) || notProcessed.length >= 1){
             return {status: 'PARTLY SUCCESSFUL', message:'Some products were not processed due to limited stock, try again another time or contact the sellers directly!', ticket: ticket, notProcessed: notProcessed}
         }
