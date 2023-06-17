@@ -88,7 +88,7 @@ class UsersController{
 
     async documentUpload(req, res){
         try{
-            const user = await UserValidator.documentVerify(req.params.id, req.files);
+            const user = await UserValidator.documentVerify(req.params.id, req);
 
             return res.status(201).send({status: "SUCCESSFUL", message: `Documents uploaded successfully`})
         }catch(err){

@@ -130,19 +130,19 @@ class UserValidator{
         return edit;
     }
 
-    async documentVerify(id, files){
+    async documentVerify(id, req){
         const user = UserService.findById(id);
         const website = req.protocol + '://' + req.get('host');
         
         let documents = [];
 
-        if(!files.id || !files.address || !files.status){
+        if(!req.files.id || !req.files.address || !req.files.status){
             throw new AppException("DOCUMENT REQUIRED", "All documents are required to continue.", 400);
         }
         documents = [
-            {name: files.id[0].fieldname, reference: `${website}/static/files/documents/${files.id[0].filename}`},
-            {name: files.address[0].fieldname, reference: `${website}/static/files/documents/${files.address[0].filename}`},
-            {name: files.status[0].fieldname, reference: `${website}/static/files/documents/${files.status[0].filename}`}
+            {name: req.files.id[0].fieldname, reference: `${website}/static/files/documents/${req.files.id[0].filename}`},
+            {name: req.files.address[0].fieldname, reference: `${website}/static/files/documents/${req.files.address[0].filename}`},
+            {name: req.files.status[0].fieldname, reference: `${website}/static/files/documents/${req.files.status[0].filename}`}
         ]
         const addFiles = await UserService.addDocuments(id, documents)
 
