@@ -115,8 +115,6 @@ class CartValidator{
             await CartService.deleteProduct(cid, product.id);
         }
 
-        console.log(notProcessed)
-
         if( total === 0 ){
             return {status: 'UNSUCCESSFUL', message: "The purchase couldn't be completed due to limited stock of the items selected."};
         }        

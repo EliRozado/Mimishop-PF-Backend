@@ -176,4 +176,8 @@ router.get('/404', async (req, res) => {
     res.render('error_not-found')
 })
 
+router.get('/403', async (req, res) => {
+    res.render('error_forbidden')
+})
+
 export default router;

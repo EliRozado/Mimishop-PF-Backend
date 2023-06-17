@@ -7,6 +7,6 @@ export const canAccess = (roles) => {
 
         let user_role = req.user.role;
 
-        roles.includes(user_role) ? next() : res.status(403).json({error: 'FORBIDDEN', message: `Only users with the roles ${roles} can do this action`}) 
+        roles.includes(user_role) ? next() : res.status(403).redirect('/403')
     }
 }
