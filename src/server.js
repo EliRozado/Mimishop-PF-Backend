@@ -20,6 +20,8 @@ import userValidator from './validators/user.validator.js';
 
 import { Server } from "socket.io";
 
+let app;
+
 if(cluster.isPrimary){
     for(let i = 0; i<4; i++)
     cluster.fork()
@@ -27,7 +29,7 @@ if(cluster.isPrimary){
     console.log(`I'm worker number ${process.pid}`)
 
     // - application
-    const app = express();
+    let app = express();
 
     // -- middlewares
     app.use('/static/', express.static(path.resolve(__dirname + '/public')));
