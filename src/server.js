@@ -81,3 +81,5 @@ if(cluster.isPrimary){
         })
     })
 }
+
+export default app;
