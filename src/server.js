@@ -20,16 +20,14 @@ import userValidator from './validators/user.validator.js';
 
 import { Server } from "socket.io";
 
-let app;
-
-if(cluster.isPrimary){
-    for(let i = 0; i<4; i++)
-    cluster.fork()
-}else{
-    console.log(`I'm worker number ${process.pid}`)
+// if(cluster.isPrimary){
+//     for(let i = 0; i<4; i++)
+//     cluster.fork()
+// }else{
+//     console.log(`I'm worker number ${process.pid}`)
 
     // - application
-    let app = express();
+    const app = express();
 
     // -- middlewares
     app.use('/static/', express.static(path.resolve(__dirname + '/public')));
@@ -82,6 +80,6 @@ if(cluster.isPrimary){
             io.sockets.emit('users', await userValidator.getAllUsers())
         })
     })
-}
+// }
 
 export default app;
